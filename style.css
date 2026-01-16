@@ -712,3 +712,71 @@ body {
         grid-template-columns: 1fr;
     }
 }
+/* Games Hub */
+
+.games-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 2rem;
+    margin-top: 3rem;
+}
+
+.game-card {
+    background: rgba(0,217,255,0.05);
+    border: 1px solid rgba(0,217,255,0.3);
+    border-radius: 20px;
+    padding: 2rem;
+    text-align: center;
+    text-decoration: none;
+    color: var(--light-text);
+    backdrop-filter: blur(10px);
+    transition: all 0.35s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.game-card h3 {
+    font-size: 1.4rem;
+    margin-bottom: 0.5rem;
+    color: var(--primary-color);
+}
+
+.game-card p {
+    font-size: 0.95rem;
+    color: var(--muted-text);
+}
+
+/* Hover Pulse */
+.game-card:hover {
+    transform: translateY(-10px) scale(1.03);
+    box-shadow: 0 0 30px rgba(0,217,255,0.5);
+    border-color: var(--primary-color);
+}
+
+/* Cyber Glow Sweep */
+.game-card::before {
+    content: '';
+    position: absolute;
+    top: -100%;
+    left: -100%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(45deg, transparent, rgba(0,217,255,0.15), transparent);
+    transform: rotate(25deg);
+    transition: 0.5s;
+}
+
+.game-card:hover::before {
+    top: 0;
+    left: 0;
+}
+
+/* Back card color */
+.back-card {
+    border-color: rgba(255,0,110,0.4);
+}
+
+.back-card h3 {
+    color: var(--secondary-color);
+}
+
