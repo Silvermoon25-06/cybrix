@@ -1,4 +1,4 @@
-// Chess Game
+// Chess Game — Cybrix Chess Arena Edition
 
 // =====================
 // UI: piece symbols
@@ -8,7 +8,6 @@ const PIECES = {
   black: { k: "♚", q: "♛", r: "♜", b: "♝", n: "♞", p: "♟" }
 };
 
-// Board uses chars: 'P','N','B','R','Q','K' for White, lowercase for Black.
 const INITIAL_BOARD = [
   ["r","n","b","q","k","b","n","r"],
   ["p","p","p","p","p","p","p","p"],
@@ -20,167 +19,164 @@ const INITIAL_BOARD = [
   ["R","N","B","Q","K","B","N","R"]
 ];
 
-let state = null; // game state object
+// =====================
+// Sounds
+// =====================
+const moveSound = new Audio("sounds/move.mp3");
+const checkSound = new Audio("sounds/check.mp3");
+const mateSound = new Audio("sounds/mate.mp3");
+
+// =====================
+// State
+// =====================
+let state = null;
 let selectedSquare = null;
-let gameMode = null; // 'human' | 'ai'
+let gameMode = null;
 let aiDifficulty = "easy";
 let gameOver = false;
 
-// DOM elements
+// =====================
+// DOM
+// =====================
 const boardElement = document.getElementById("board");
 const statusElement = document.getElementById("status");
 const resetButton = document.getElementById("reset");
 const humanVsHumanButton = document.getElementById("human-vs-human");
 const humanVsAiButton = document.getElementById("human-vs-ai");
 const aiDifficultySelect = document.getElementById("ai-difficulty");
-function cloneBoard(board) {
-  return board.map(row => row.slice());
-}
-function inBounds(r,c){ return r>=0 && r<8 && c>=0 && c<8; }
 
-function pieceColor(piece){
-  if (!piece) return null;
-  return piece === piece.toUpperCase() ? "white" : "black";
-}
-function pieceType(piece){
-  return piece ? piece.toLowerCase() : "";
-}
+// =====================
+// Helpers
+// =====================
+function cloneBoard(board){ return board.map(r=>r.slice()); }
+function inBounds(r,c){ return r>=0&&r<8&&c>=0&&c<8; }
+function pieceColor(p){ return p? (p===p.toUpperCase()?"white":"black"):null; }
+function pieceType(p){ return p?p.toLowerCase():""; }
+function opponent(c){ return c==="white"?"black":"white"; }
 
-function opponent(color){ return color === "white" ? "black" : "white"; }
-
-function algebraic(r,c){
-  return "abcdefgh"[c] + (8 - r);
-}
-
-function makeEmptyState() {
+function makeEmptyState(){
   return {
     board: cloneBoard(INITIAL_BOARD),
-    turn: "white",
-    // Castling rights: K/Q for white, k/q for black
-    castling: { K: true, Q: true, k: true, q: true },
-    enPassant: null, // { r, c } square that can be captured en passant
-    halfmove: 0,
-    fullmove: 1,
-    lastMove: null // for UI
+    turn:"white",
+    castling:{K:true,Q:true,k:true,q:true},
+    enPassant:null,
+    lastMove:null
   };
 }
 
 // =====================
 // Rendering
 // =====================
-function renderBoard() {
-  boardElement.innerHTML = "";
-  for (let r = 0; r < 8; r++) {
-    for (let c = 0; c < 8; c++) {
-      const square = document.createElement("div");
-      square.className = "square " + ((r + c) % 2 === 0 ? "light" : "dark");
-      square.dataset.row = r;
-      square.dataset.col = c;
-      square.addEventListener("click", handleSquareClick);
+function renderBoard(){
+  boardElement.innerHTML="";
+  for(let r=0;r<8;r++){
+    for(let c=0;c<8;c++){
+      const sq=document.createElement("div");
+      sq.className="square "+((r+c)%2===0?"light":"dark");
+      sq.dataset.row=r;
+      sq.dataset.col=c;
+      sq.addEventListener("click",handleSquareClick);
 
-      const p = state.board[r][c];
-      if (p) {
-        const col = pieceColor(p);
-        const t = pieceType(p);
-        square.textContent = PIECES[col][t];
+      const p=state.board[r][c];
+      if(p){
+        sq.textContent=PIECES[pieceColor(p)][pieceType(p)];
       }
-
-      boardElement.appendChild(square);
+      boardElement.appendChild(sq);
     }
   }
 }
 
-function clearHighlights() {
-  document.querySelectorAll(".selected, .possible-move").forEach(el => {
-    el.classList.remove("selected", "possible-move");
+function clearHighlights(){
+  document.querySelectorAll(".selected,.possible-move,.check,.checkmate").forEach(e=>{
+    e.classList.remove("selected","possible-move","check","checkmate");
   });
 }
 
-function highlightMoves(fromR, fromC) {
+function highlightMoves(r,c){
   clearHighlights();
-
-  const selectedEl = document.querySelector(`[data-row="${fromR}"][data-col="${fromC}"]`);
-  if (selectedEl) selectedEl.classList.add("selected");
-
-  const moves = generateLegalMoves(state).filter(m => m.fromR===fromR && m.fromC===fromC);
-  for (const m of moves) {
-    const el = document.querySelector(`[data-row="${m.toR}"][data-col="${m.toC}"]`);
-    if (el) el.classList.add("possible-move");
-  }
+  document.querySelector(`[data-row="${r}"][data-col="${c}"]`).classList.add("selected");
+  const moves=generateLegalMoves(state).filter(m=>m.fromR===r&&m.fromC===c);
+  moves.forEach(m=>{
+    document.querySelector(`[data-row="${m.toR}"][data-col="${m.toC}"]`).classList.add("possible-move");
+  });
 }
 
-function updateStatus(extra = "") {
-  if (gameOver) return;
-  const who = state.turn.charAt(0).toUpperCase() + state.turn.slice(1);
-  statusElement.textContent = extra ? `${who}'s turn. ${extra}` : `${who}'s turn`;
-}
-function handleSquareClick(event) {
-  if (gameOver) return;
-  const squareEl = event.target.closest(".square");
-  if (!squareEl) return;
+// =====================
+// Interaction
+// =====================
+function handleSquareClick(e){
+  if(gameOver)return;
+  const el=e.target.closest(".square");
+  if(!el)return;
 
-  const r = parseInt(squareEl.dataset.row, 10);
-  const c = parseInt(squareEl.dataset.col, 10);
+  const r=+el.dataset.row,c=+el.dataset.col;
+  const piece=state.board[r][c];
 
-  const clickedPiece = state.board[r][c];
-
-  if (selectedSquare) {
-    // Attempt move
-    const legalMoves = generateLegalMoves(state);
-    const chosen = legalMoves.find(m =>
-      m.fromR === selectedSquare.r &&
-      m.fromC === selectedSquare.c &&
-      m.toR === r &&
-      m.toC === c
-    );
-
-    if (chosen) {
-      applyMoveInPlace(state, chosen);
-      selectedSquare = null;
+  if(selectedSquare){
+    const legal=generateLegalMoves(state);
+    const chosen=legal.find(m=>m.fromR===selectedSquare.r&&m.fromC===selectedSquare.c&&m.toR===r&&m.toC===c);
+    if(chosen){
+      animateMove(selectedSquare.r,selectedSquare.c);
+      applyMoveInPlace(state,chosen);
+      moveSound.currentTime=0; moveSound.play();
+      selectedSquare=null;
       clearHighlights();
       renderBoard();
       afterMove();
       return;
-    } else {
-      // Reselect or clear
-      selectedSquare = null;
-      clearHighlights();
-      renderBoard();
-      // If they clicked their own piece, select it
-      if (clickedPiece && pieceColor(clickedPiece) === state.turn) {
-        selectedSquare = { r, c };
-        highlightMoves(r, c);
-      }
-      return;
     }
-  } else {
-    if (clickedPiece && pieceColor(clickedPiece) === state.turn) {
-      selectedSquare = { r, c };
-      highlightMoves(r, c);
-    }
+    selectedSquare=null;
+    clearHighlights();
+    renderBoard();
+  }
+
+  if(piece&&pieceColor(piece)===state.turn){
+    selectedSquare={r,c};
+    highlightMoves(r,c);
   }
 }
 
-function afterMove() {
-  const end = getGameEndState(state);
-  if (end.over) {
-    gameOver = true;
-    statusElement.textContent = end.message;
+function animateMove(r,c){
+  const el=document.querySelector(`[data-row="${r}"][data-col="${c}"]`);
+  if(el){
+    el.classList.add("moving");
+    setTimeout(()=>el.classList.remove("moving"),200);
+  }
+}
+
+// =====================
+// After Move
+// =====================
+function afterMove(){
+  const end=getGameEndState(state);
+  if(end.over){
+    gameOver=true;
+    statusElement.textContent=end.message;
+    mateSound.play();
+    highlightKing("checkmate");
     return;
   }
 
-  updateStatus(end.check ? "Check." : "");
+  if(end.check){
+    statusElement.textContent="Check!";
+    checkSound.play();
+    highlightKing("check");
+  }else{
+    statusElement.textContent=state.turn.charAt(0).toUpperCase()+state.turn.slice(1)+"'s turn";
+  }
 
-  if (gameMode === "ai" && state.turn === "black") {
-    setTimeout(() => {
-      makeAiMove();
-    }, 150);
+  if(gameMode==="ai"&&state.turn==="black"){
+    setTimeout(makeAiMove,300);
   }
 }
 
-// =====================
-// Game end: checkmate/stalemate
-// =====================
+function highlightKing(type){
+  const k=findKing(state.board,state.turn);
+  if(!k)return;
+  const el=document.querySelector(`[data-row="${k.r}"][data-col="${k.c}"]`);
+  if(el)el.classList.add(type);
+}
+
 function findKing(board, color) {
   const k = color === "white" ? "K" : "k";
   for (let r=0;r<8;r++){
@@ -700,3 +696,4 @@ resetButton.addEventListener("click", initGame);
 
 // Start
 initGame();
+
