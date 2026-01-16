@@ -78,10 +78,16 @@ function renderBoard(){
       sq.addEventListener("click",handleSquareClick);
 
       const p=state.board[r][c];
-      if(p){
-  sq.textContent = PIECES[pieceColor(p)][pieceType(p)];
-  sq.classList.add(pieceColor(p) === "white" ? "white-piece" : "black-piece");
+     if (p) {
+  const color = pieceColor(p);
+  const type = pieceType(p);
+
+  sq.textContent = PIECES[color][type];
+
+  sq.classList.remove("white-piece", "black-piece");
+  sq.classList.add(color === "white" ? "white-piece" : "black-piece");
 }
+
       boardElement.appendChild(sq);
     }
   }
@@ -697,5 +703,6 @@ resetButton.addEventListener("click", initGame);
 
 // Start
 initGame();
+
 
 
