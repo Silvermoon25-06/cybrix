@@ -79,8 +79,9 @@ function renderBoard(){
 
       const p=state.board[r][c];
       if(p){
-        sq.textContent=PIECES[pieceColor(p)][pieceType(p)];
-      }
+  sq.textContent = PIECES[pieceColor(p)][pieceType(p)];
+  sq.classList.add(pieceColor(p) === "white" ? "white-piece" : "black-piece");
+}
       boardElement.appendChild(sq);
     }
   }
@@ -696,4 +697,5 @@ resetButton.addEventListener("click", initGame);
 
 // Start
 initGame();
+
 
