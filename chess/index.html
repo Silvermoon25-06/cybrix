@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chess Game</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="game-container">
+        <h1>Chess Game</h1>
+        <div id="mode-selection">
+            <button id="human-vs-human">Player vs Player </button>
+            <button id="human-vs-ai">Player vs AI</button>
+            <select id="ai-difficulty" style="display: none;">
+                <option value="easy">Novice</option>
+                <option value="medium">Pro</option>
+                <option value="hard">Expert</option>
+            </select>
+        </div>
+        <div id="board"></div>
+        <div id="status">Select game mode to start.</div>
+        <button id="reset">Restart</button>
+    </div>
+</body>
+</html>

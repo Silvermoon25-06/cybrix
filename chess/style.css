@@ -1,0 +1,67 @@
+body {
+    font-family: Arial Black, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    background-color: chocolate;
+}
+
+#game-container {
+    text-align: center;
+}
+
+#board {
+    display: grid;
+    grid-template-columns: repeat(8, 60px);
+    grid-template-rows: repeat(8, 60px);
+    gap: 0;
+    border: 4px solid #333;
+    margin: 20px auto;
+}
+
+.square {
+    width: 60px;
+    height: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 40px;
+    font-family: "Segoe UI Symbol", Arial, sans-serif;
+    cursor: pointer;
+    user-select: none;
+}
+
+.light {
+    background-color: #f0d9b5;
+}
+
+.dark {
+    background-color: #b58863;
+}
+
+.selected {
+    background-color: grey;
+}
+
+.possible-move {
+    background-color: #9b59b6;
+}
+
+#status {
+    margin: 20px 0;
+    font-size: 18px;
+}
+
+button {
+    margin: 10px;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+#ai-difficulty {
+    margin: 10px;
+    padding: 5px;
+}
