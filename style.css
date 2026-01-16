@@ -800,3 +800,48 @@ body {
 .back-card h3 {
     color: var(--secondary-color);
 }
+/* Game Hub Button */
+
+.game-hub-btn {
+    position: relative;
+    animation: hubPulse 2.5s infinite;
+    box-shadow: 0 0 25px rgba(0,217,255,0.6);
+}
+
+.game-hub-btn::after {
+    content: '';
+    position: absolute;
+    inset: -4px;
+    border-radius: 50px;
+    border: 2px solid rgba(0,217,255,0.6);
+    animation: ringPulse 2.5s infinite;
+}
+
+@keyframes hubPulse {
+    0% {
+        box-shadow: 0 0 15px rgba(0,217,255,0.4);
+    }
+    50% {
+        box-shadow: 0 0 35px rgba(0,217,255,0.9),
+                    0 0 60px rgba(124,58,237,0.5);
+    }
+    100% {
+        box-shadow: 0 0 15px rgba(0,217,255,0.4);
+    }
+}
+
+@keyframes ringPulse {
+    0% {
+        opacity: 0.3;
+        transform: scale(1);
+    }
+    50% {
+        opacity: 0.8;
+        transform: scale(1.1);
+    }
+    100% {
+        opacity: 0.3;
+        transform: scale(1);
+    }
+}
+
