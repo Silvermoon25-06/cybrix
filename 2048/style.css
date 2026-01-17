@@ -1,0 +1,43 @@
+body {
+    background: radial-gradient(circle at top, #0a0e27, #050812);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    min-height:100vh;
+    font-family:Segoe UI,sans-serif;
+    color:white;
+}
+
+.game-container {
+    text-align:center;
+    background:rgba(0,217,255,0.05);
+    padding:25px;
+    border-radius:18px;
+    border:1px solid rgba(0,217,255,0.3);
+    box-shadow:0 0 30px rgba(0,217,255,0.4);
+    width:min(90vw,350px);
+}
+
+#grid {
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:10px;
+    margin:20px 0;
+}
+
+.cell {
+    aspect-ratio:1;
+    background:#0a1338;
+    border-radius:12px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-size:22px;
+    font-weight:700;
+    box-shadow:inset 0 0 10px rgba(0,217,255,0.3);
+}
+
+.tile {
+    color:#00ff9c;
+    text-shadow:0 0 10px #00ff9c;
+}
