@@ -41,3 +41,27 @@ body {
     color:#00ff9c;
     text-shadow:0 0 10px #00ff9c;
 }
+
+button {
+    margin-top:10px;
+    padding:10px 24px;
+    border-radius:40px;
+    border:none;
+    background:linear-gradient(135deg,#00d9ff,#7c3aed);
+    color:#050812;
+    font-weight:700;
+    box-shadow:0 0 20px rgba(0,217,255,0.7);
+    cursor:pointer;
+}
+
+.t2{background:#0a1f3a;color:#00ff9c;}
+.t4{background:#0d2a4d;color:#00ffd5;}
+.t8{background:#123b5f;color:#00ffea;}
+.t16{background:#1b4d70;color:#00e1ff;}
+.t32{background:#245f80;color:#00c3ff;}
+.t64{background:#2e728f;color:#00a6ff;}
+.t128{background:#3c85a0;color:#ffd166;}
+.t256{background:#4a99b1;color:#ffb703;}
+.t512{background:#5daec0;color:#ff8800;}
+.t1024{background:#6fc2cf;color:#ff5500;}
+.t2048{background:#8be9fd;color:#ff0000;}
