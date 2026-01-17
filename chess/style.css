@@ -157,8 +157,9 @@ button:hover {
         0 0 4px #ffb703,
         0 0 10px rgba(255,183,3,0.9),
         0 0 18px rgba(255,183,3,0.7);
-    filter: brightness(0.4);
+    filter: brightness(1);
 }
+
 
 
 
