@@ -30,6 +30,11 @@ body {
     border: 2px solid rgba(0,217,255,0.6);
     margin: 20px auto;
     box-shadow: 0 0 30px rgba(0,217,255,0.6);
+    animation: boardGlow 6s infinite alternate;
+
+@keyframes boardGlow {
+    from { box-shadow: 0 0 25px rgba(0,217,255,0.5); }
+    to { box-shadow: 0 0 40px rgba(0,217,255,0.9); }
 }
 
 /* Squares */
@@ -52,16 +57,19 @@ body {
 
 /* Board colors */
 .light {
-    background-color: #101a40;
+    background-color: #13245a;
 }
 
 .dark {
-    background-color: #0a0e27;
+    background-color: #0a1338;
 }
 
 /* Hover */
 .square:hover {
-    box-shadow: inset 0 0 18px rgba(0,217,255,0.5);
+    box-shadow:
+        inset 0 0 18px rgba(0,217,255,0.6),
+        0 0 8px rgba(0,217,255,0.5);
+    transform: scale(1.05);
 }
 
 /* Moving animation */
@@ -71,14 +79,18 @@ body {
 
 /* Selected piece */
 .selected {
-    background-color: rgba(0,217,255,0.6) !important;
-    box-shadow: inset 0 0 25px rgba(0,217,255,1);
+    background-color: rgba(0,217,255,0.45) !important;
+    box-shadow:
+        inset 0 0 20px rgba(0,217,255,1),
+        0 0 15px rgba(0,217,255,0.8);
 }
 
 /* Possible move */
 .possible-move {
-    background-color: rgba(124,58,237,0.65) !important;
-    box-shadow: inset 0 0 18px rgba(124,58,237,1);
+    background-color: rgba(0,255,156,0.45) !important;
+    box-shadow:
+        inset 0 0 18px rgba(0,255,156,1),
+        0 0 10px rgba(0,255,156,0.8);
 }
 
 /* Check state */
@@ -104,7 +116,9 @@ body {
 #status {
     margin: 15px 0;
     font-size: 18px;
-    color: #00d9ff;
+    #status {
+    color: #ffd166;
+    text-shadow: 0 0 10px rgba(255,209,102,0.8);
     letter-spacing: 0.5px;
 }
 
@@ -142,8 +156,9 @@ button:hover {
     color: #f2fcff !important;
     text-shadow:
         0 0 4px #00d9ff,
-        0 0 10px rgba(0,217,255,0.9),
-        0 0 18px rgba(0,217,255,0.7);
+        text-shadow:
+    0 0 3px rgba(255,255,255,0.8),
+    0 0 8px rgba(0,217,255,0.6);
 }
 
 /* Black Pieces */
@@ -151,10 +166,12 @@ button:hover {
     color: #ff4fa3 !important;
     text-shadow:
         0 0 4px #ff006e,
-        0 0 10px rgba(255,0,110,0.9),
-        0 0 18px rgba(255,0,110,0.7);
+       text-shadow:
+    0 0 3px rgba(255,255,255,0.8),
+    0 0 8px rgba(0,217,255,0.6);
     filter: brightness(0.75);
 }
+
 
 
 
