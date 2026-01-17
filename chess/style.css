@@ -52,11 +52,11 @@ body {
 
 /* Board colors */
 .light {
-    background-color: #13245a;
+    background-color: #101a40;
 }
 
 .dark {
-    background-color: #0a1338;
+    background-color: #0a0e27;
 }
 
 /* Hover */
@@ -166,6 +166,7 @@ button:hover {
     0 0 8px rgba(0,217,255,0.6);
     filter: brightness(0.75);
 }
+
 
 
 
