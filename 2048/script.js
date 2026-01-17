@@ -109,11 +109,28 @@ document.addEventListener("keydown",e=>{
     if(e.key==="ArrowDown") move("down");
 });
 
-let sx,sy;
-document.addEventListener("touchstart",e=>{
-    sx=e.touches[0].clientX;
-    sy=e.touches[0].clientY;
-});
+let sx, sy;
+
+document.addEventListener("touchstart", e => {
+    e.preventDefault();
+    sx = e.touches[0].clientX;
+    sy = e.touches[0].clientY;
+},{ passive:false });
+
+document.addEventListener("touchend", e => {
+    e.preventDefault();
+
+    let dx = e.changedTouches[0].clientX - sx;
+    let dy = e.changedTouches[0].clientY - sy;
+
+    if(Math.abs(dx) > Math.abs(dy)){
+        if(dx > 30) move("right");
+        if(dx < -30) move("left");
+    } else {
+        if(dy > 30) move("down");
+        if(dy < -30) move("up");
+    }
+},{ passive:false });
 
 document.addEventListener("touchend",e=>{
     let dx=e.changedTouches[0].clientX-sx;
@@ -129,3 +146,4 @@ document.addEventListener("touchend",e=>{
 });
 
 resetGame();
+
