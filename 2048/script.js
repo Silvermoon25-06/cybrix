@@ -9,10 +9,12 @@ function createGrid(){
     board.forEach(v=>{
         const div=document.createElement("div");
         div.className="cell";
+
         if(v){
             div.textContent=v;
             div.classList.add("t"+v);
         }
+
         grid.appendChild(div);
     });
 }
@@ -146,4 +148,5 @@ document.addEventListener("touchend",e=>{
 });
 
 resetGame();
+
 
