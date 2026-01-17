@@ -8,10 +8,9 @@ function createGrid(){
     grid.innerHTML="";
     board.forEach(v=>{
         const div=document.createElement("div");
-        div.classList.add("cell");
+        div.className="cell";
         if(v){
             div.textContent=v;
-            div.classList.add("tile");
             div.classList.add("t"+v);
         }
         grid.appendChild(div);
@@ -19,53 +18,63 @@ function createGrid(){
 }
 
 function addTile(){
-    let empty = board.map((v,i)=>v===0?i:null).filter(v=>v!==null);
-    if(empty.length===0) return;
-    let index = empty[Math.floor(Math.random()*empty.length)];
-    board[index] = Math.random()>0.9 ? 4 : 2;
+    let empty=[];
+    board.forEach((v,i)=>{ if(v===0) empty.push(i); });
+    if(!empty.length) return;
+    let i=empty[Math.floor(Math.random()*empty.length)];
+    board[i]=Math.random()>0.9?4:2;
 }
 
-function move(arr){
-    let newArr = arr.filter(v=>v);
-    for(let i=0;i<newArr.length-1;i++){
-        if(newArr[i]===newArr[i+1]){
-            newArr[i]*=2;
-            score+=newArr[i];
-            newArr.splice(i+1,1);
+function slide(row){
+    row=row.filter(v=>v);
+    for(let i=0;i<row.length-1;i++){
+        if(row[i]===row[i+1]){
+            row[i]*=2;
+            score+=row[i];
+            row.splice(i+1,1);
         }
     }
-    while(newArr.length<4) newArr.push(0);
-    return newArr;
+    while(row.length<4) row.push(0);
+    return row;
 }
 
-function rotate(times){
-    while(times--){
-        let temp=[];
-        for(let i=0;i<4;i++){
-            for(let j=3;j>=0;j--){
-                temp.push(board[j*4+i]);
-            }
-        }
-        board=temp;
-    }
-}
-
-function moveBoard(direction){
-    let old = board.join();
-
-    if(direction==="up") rotate(1);
-    if(direction==="right") rotate(2);
-    if(direction==="down") rotate(3);
-
+function moveLeft(){
     for(let r=0;r<4;r++){
-        let row = board.slice(r*4,r*4+4);
-        let moved = move(row);
-        for(let i=0;i<4;i++) board[r*4+i]=moved[i];
+        let row=slide(board.slice(r*4,r*4+4));
+        for(let i=0;i<4;i++) board[r*4+i]=row[i];
     }
+}
 
-    if(direction==="up") rotate(3);
-    if(direction==="right") rotate(2);
-    if(direction==="down") rotate(1);
+function moveRight(){
+    for(let r=0;r<4;r++){
+        let row=slide(board.slice(r*4,r*4+4).reverse()).reverse();
+        for(let i=0;i<4;i++) board[r*4+i]=row[i];
+    }
+}
+
+function moveUp(){
+    for(let c=0;c<4;c++){
+        let col=[board[c],board[c+4],board[c+8],board[c+12]];
+        col=slide(col);
+        for(let i=0;i<4;i++) board[c+i*4]=col[i];
+    }
+}
+
+function moveDown(){
+    for(let c=0;c<4;c++){
+        let col=[board[c],board[c+4],board[c+8],board[c+12]].reverse();
+        col=slide(col).reverse();
+        for(let i=0;i<4;i++) board[c+i*4]=col[i];
+    }
+}
+
+function move(dir){
+    let old=board.join();
+
+    if(dir==="left") moveLeft();
+    if(dir==="right") moveRight();
+    if(dir==="up") moveUp();
+    if(dir==="down") moveDown();
 
     if(old!==board.join()){
         addTile();
@@ -79,46 +88,43 @@ function checkGameOver(){
     if(board.includes(0)) return;
 
     for(let i=0;i<16;i++){
-        let x=i%4, y=Math.floor(i/4);
-        if(x<3 && board[i]===board[i+1]) return;
-        if(y<3 && board[i]===board[i+4]) return;
+        if(i%4<3 && board[i]===board[i+1]) return;
+        if(i<12 && board[i]===board[i+4]) return;
     }
-
-    alert("Game Over!");
+    alert("Game Over");
 }
 
 function resetGame(){
     board=Array(16).fill(0);
     score=0;
-    addTile();
-    addTile();
+    addTile(); addTile();
     createGrid();
     scoreText.textContent="Score: 0";
 }
 
 document.addEventListener("keydown",e=>{
-    if(e.key==="ArrowLeft") moveBoard("left");
-    if(e.key==="ArrowRight") moveBoard("right");
-    if(e.key==="ArrowUp") moveBoard("up");
-    if(e.key==="ArrowDown") moveBoard("down");
+    if(e.key==="ArrowLeft") move("left");
+    if(e.key==="ArrowRight") move("right");
+    if(e.key==="ArrowUp") move("up");
+    if(e.key==="ArrowDown") move("down");
 });
 
-let startX,startY;
+let sx,sy;
 document.addEventListener("touchstart",e=>{
-    startX=e.touches[0].clientX;
-    startY=e.touches[0].clientY;
+    sx=e.touches[0].clientX;
+    sy=e.touches[0].clientY;
 });
 
 document.addEventListener("touchend",e=>{
-    let dx=e.changedTouches[0].clientX-startX;
-    let dy=e.changedTouches[0].clientY-startY;
+    let dx=e.changedTouches[0].clientX-sx;
+    let dy=e.changedTouches[0].clientY-sy;
 
     if(Math.abs(dx)>Math.abs(dy)){
-        if(dx>30) moveBoard("right");
-        if(dx<-30) moveBoard("left");
+        if(dx>30) move("right");
+        if(dx<-30) move("left");
     } else {
-        if(dy>30) moveBoard("down");
-        if(dy<-30) moveBoard("up");
+        if(dy>30) move("down");
+        if(dy<-30) move("up");
     }
 });
 
