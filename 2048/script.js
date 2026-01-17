@@ -9,12 +9,10 @@ function createGrid(){
     board.forEach(v=>{
         const div=document.createElement("div");
         div.className="cell";
-
         if(v){
             div.textContent=v;
             div.classList.add("t"+v);
         }
-
         grid.appendChild(div);
     });
 }
@@ -93,15 +91,21 @@ function checkGameOver(){
         if(i%4<3 && board[i]===board[i+1]) return;
         if(i<12 && board[i]===board[i+4]) return;
     }
+
     alert("Game Over");
 }
 
 function resetGame(){
-    board=Array(16).fill(0);
-    score=0;
-    addTile(); addTile();
+    board = Array(16).fill(0);
+    score = 0;
+    addTile();
+    addTile();
     createGrid();
     scoreText.textContent="Score: 0";
+}
+
+function goToHub(){
+    window.location.href = "../games/";
 }
 
 document.addEventListener("keydown",e=>{
@@ -134,19 +138,4 @@ document.addEventListener("touchend", e => {
     }
 },{ passive:false });
 
-document.addEventListener("touchend",e=>{
-    let dx=e.changedTouches[0].clientX-sx;
-    let dy=e.changedTouches[0].clientY-sy;
-
-    if(Math.abs(dx)>Math.abs(dy)){
-        if(dx>30) move("right");
-        if(dx<-30) move("left");
-    } else {
-        if(dy>30) move("down");
-        if(dy<-30) move("up");
-    }
-});
-
 resetGame();
-
-
