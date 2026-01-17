@@ -152,11 +152,11 @@ button:hover {
 
 /* Black Pieces */
 .black-piece {
-    color: #ff3b3b !important;
+    color: #ffd166 !important;
     text-shadow:
-        0 0 4px #ff0000,
-        0 0 10px rgba(255,0,0,0.9),
-        0 0 18px rgba(255,0,0,0.7);
+        0 0 4px #ffb703,
+        0 0 10px rgba(255,183,3,0.9),
+        0 0 18px rgba(255,183,3,0.7);
+    filter: brightness(0.75);
 }
-
 
