@@ -46,8 +46,8 @@ body {
     transition: background 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
     font-weight: 700;
     text-shadow:
-        0 0 6px rgba(255,255,255,0.7),
-        0 0 12px rgba(0,217,255,0.4);
+    0 0 6px rgba(255,255,255,0.7),
+    0 0 12px rgba(0,217,255,0.4);
 }
 
 /* Board colors */
@@ -61,10 +61,7 @@ body {
 
 /* Hover */
 .square:hover {
-    box-shadow:
-        inset 0 0 18px rgba(0,217,255,0.6),
-        0 0 8px rgba(0,217,255,0.5);
-    transform: scale(1.05);
+    box-shadow: inset 0 0 18px rgba(0,217,255,0.5);
 }
 
 /* Moving animation */
@@ -74,10 +71,8 @@ body {
 
 /* Selected piece */
 .selected {
-    background-color: rgba(0,217,255,0.45) !important;
-    box-shadow:
-        inset 0 0 20px rgba(0,217,255,1),
-        0 0 15px rgba(0,217,255,0.8);
+    background-color: rgba(0,217,255,0.6) !important;
+    box-shadow: inset 0 0 25px rgba(0,217,255,1);
 }
 
 /* Possible move */
@@ -111,7 +106,6 @@ body {
 #status {
     margin: 15px 0;
     font-size: 18px;
-    #status {
     color: #ffd166;
     text-shadow: 0 0 10px rgba(255,209,102,0.8);
     letter-spacing: 0.5px;
@@ -166,6 +160,7 @@ button:hover {
     0 0 8px rgba(0,217,255,0.6);
     filter: brightness(0.75);
 }
+
 
 
 
