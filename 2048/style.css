@@ -41,18 +41,17 @@ body {
 }
 
 /* Tile Colors */
-.t2{background:#0a1f3a;color:#00ff9c;}
-.t4{background:#0d2a4d;color:#00ffd5;}
-.t8{background:#123b5f;color:#00ffea;}
-.t16{background:#1b4d70;color:#00e1ff;}
-.t32{background:#245f80;color:#00c3ff;}
-.t64{background:#2e728f;color:#00a6ff;}
-.t128{background:#3c85a0;color:#ffd166;}
-.t256{background:#4a99b1;color:#ffb703;}
-.t512{background:#5daec0;color:#ff8800;}
-.t1024{background:#6fc2cf;color:#ff5500;}
-.t2048{background:#8be9fd;color:#ff0000;}
-
+.t2    { background:#1e3a8a; color:#93c5fd; }
+.t4    { background:#065f46; color:#6ee7b7; }
+.t8    { background:#7c2d12; color:#fdba74; }
+.t16   { background:#4c1d95; color:#c4b5fd; }
+.t32   { background:#7f1d1d; color:#fca5a5; }
+.t64   { background:#92400e; color:#fde68a; }
+.t128  { background:#1e40af; color:#bfdbfe; }
+.t256  { background:#166534; color:#86efac; }
+.t512  { background:#831843; color:#f9a8d4; }
+.t1024 { background:#0f172a; color:#38bdf8; }
+.t2048 { background:#facc15; color:#000000; }
 
 .tile {
     color:#00ff9c;
@@ -70,4 +69,5 @@ button {
     box-shadow:0 0 20px rgba(0,217,255,0.7);
     cursor:pointer;
 }
+
 
